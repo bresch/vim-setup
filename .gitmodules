@@ -3,4 +3,10 @@
 	url = git@github.com:tpope/vim-surround.git
 [submodule "bundle/YouCompleteMe"]
 	path = bundle/YouCompleteMe
-	url = https://github.com/Valloric/YouCompleteMe.git
+	url = git@github.com:ycm-core/YouCompleteMe.git
+[submodule "bundle/denite.nvim"]
+	path = bundle/denite.nvim
+	url = git@github.com:Shougo/denite.nvim.git
+[submodule "bundle/vim-fugitive"]
+	path = bundle/vim-fugitive
+	url = git@github.com:tpope/vim-fugitive.git
