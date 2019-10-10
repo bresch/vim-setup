@@ -14,6 +14,8 @@ set nohlsearch
 set mouse=a
 set guicursor=
 set scrolloff=20
+set ignorecase
+set smartcase
 
 " set grepprg=grep\ -nH\ $*
 let g:tex_flavor='tex'
@@ -52,9 +54,10 @@ call denite#custom#map(
 \)
 
 " Switch to header or c file
-nnoremap gH :e %<.h<CR>
-nnoremap gC :e %<.cpp<CR>
-"command SO so $MYVIMRC
+map gH :call CurtineIncSw()<CR>
+
+" Open tagbar
+nmap gt :TagbarOpenAutoClose<CR>
 
 " Open this init file
 nnoremap gi :e ~/.config/nvim/init.vim<CR>
