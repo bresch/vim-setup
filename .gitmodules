@@ -28,3 +28,9 @@
 [submodule "bundle/ferret"]
 	path = bundle/ferret
 	url = git@github.com:wincent/ferret.git
+[submodule "bundle/fzf.vim"]
+	path = bundle/fzf.vim
+	url = git@github.com:junegunn/fzf.vim.git
+[submodule "bundle/fzf"]
+	path = bundle/fzf
+	url = git@github.com:junegunn/fzf.git
