@@ -1,4 +1,5 @@
 execute pathogen#infect()
+Helptags
 
 syntax on
 filetype plugin indent on
@@ -17,41 +18,43 @@ set scrolloff=20
 set ignorecase
 set smartcase
 
+" colorscheme ron
+
 " set grepprg=grep\ -nH\ $*
 let g:tex_flavor='tex'
 
-map <C-p> :Denite file_rec<CR>
-nnoremap <leader>8 :<C-u>DeniteCursorWord grep: -mode=normal<CR>
-nnoremap <buffer> <Leader>ll :!python %<cr>
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
+map <C-p> :FZF<CR>
+nnoremap <silent><Leader>* :Rg <C-R><C-W><CR>
+
+" Customize fzf colors to match your color scheme
+    " - fzf#wrap translates this to a set of `--color` options
+" let g:fzf_colors =
+" \ { 'fg':      ['fg', 'Normal'],
+" \ 'bg':      ['bg', 'Normal'],
+" \ 'hl':      ['fg', 'Comment'],
+" \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+" \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+" \ 'hl+':     ['fg', 'Statement'],
+" \ 'info':    ['fg', 'PreProc'],
+" \ 'border':  ['fg', 'Ignore'],
+" \ 'prompt':  ['fg', 'Conditional'],
+" \ 'pointer': ['fg', 'Exception'],
+" \ 'marker':  ['fg', 'Keyword'],
+" \ 'spinner': ['fg', 'Label'],
+" \ 'header':  ['fg', 'Comment'] }
 
 "" Global and local search
-nmap <leader>go :Denite grep: -mode=normal<CR>
-nmap <leader>gl :DeniteBufferDir grep<CR>
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
 
-"" File search with Ripgrep
-call denite#custom#var('file_rec', 'command', ['rg', '--files', '--glob', '!.git'])
-
-"" Use Ripgrep for grepping
-call denite#custom#var('grep', 'command', ['rg'])
-call denite#custom#var('grep', 'default_opts', ['--vimgrep', '--no-heading'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-
-" Move in grep and file search results while being in insert mode
-call denite#custom#map(
-	      \ 'insert',
-	      \ '<C-j>',
-	      \ '<denite:move_to_next_line>',
-	      \ 'noremap'
-          \)
-call denite#custom#map(
-	      \ 'insert',
-	      \ '<C-k>',
-	      \ '<denite:move_to_previous_line>',
-	      \ 'noremap'
-\)
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+nmap <leader>go :Rg 
 
 " Switch to header or c file
 map gH :call CurtineIncSw()<CR>
@@ -65,7 +68,6 @@ nnoremap gi :e ~/.config/nvim/init.vim<CR>
 " Buffer switching
 nnoremap gj :bp<CR>
 nnoremap gk :bn<CR>
-nnoremap gl :<C-u>Denite buffer -mode=normal<CR>
 
 " Buffer scrolling (keep cursor at same height)
 nnoremap <C-j> j<C-e>
@@ -79,6 +81,11 @@ nnoremap J <Esc>i<CR><Esc>
 nnoremap <C-c> :bp\|bd #<CR>
 
 let g:ycm_global_ycm_extra_conf = '~/src/Firmware/.ycm_extra_conf.py'
+let g:ycm_filetype_whitelist = {
+			\ "c":1,
+			\ "cpp":1,
+			\ "python":1,
+			\ }
 imap <C-space> <esc>A<Plug>snipMateNextOrTrigger
 smap <C-space> <Plug>snipMateNextOrTrigger
 let g:snips_author='Mathieu Bresciani'
@@ -101,6 +108,37 @@ autocmd FileType python autocmd BufWritePre <buffer> %s/\s\+$//e
 " Persistent undo
 set undofile
 set undodir=$HOME/.config/nvim/undo
-
 set undolevels=1000
 set undoreload=10000
+
+" Abbreviations
+iabbrev breakpoint import pdb; pdb.set_trace()
+command! Breakpoint call AddBreakpoint()
+function! AddBreakpoint()
+   normal! iimport pdb; pdb.set_trace()
+endfunction
+
+" EasyMotion plugin
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+nmap <Leader>s <Plug>(easymotion-overwin-f2)
+
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+map  ? <Plug>(easymotion-sn)
+omap ? <Plug>(easymotion-tn)
+nmap * /<C-r><C-w><CR>n
+nmap # ?<C-r><C-w><CR>N
+
+" These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
+" Without these mappings, `n` & `N` works fine. (These mappings just provide
+" different highlight method and have some other features )
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
