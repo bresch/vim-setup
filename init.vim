@@ -18,31 +18,12 @@ set scrolloff=20
 set ignorecase
 set smartcase
 
-" colorscheme ron
-
 " set grepprg=grep\ -nH\ $*
 let g:tex_flavor='tex'
 
 let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
 map <C-p> :FZF<CR>
 nnoremap <silent><Leader>* :Rg <C-R><C-W><CR>
-
-" Customize fzf colors to match your color scheme
-    " - fzf#wrap translates this to a set of `--color` options
-" let g:fzf_colors =
-" \ { 'fg':      ['fg', 'Normal'],
-" \ 'bg':      ['bg', 'Normal'],
-" \ 'hl':      ['fg', 'Comment'],
-" \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-" \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-" \ 'hl+':     ['fg', 'Statement'],
-" \ 'info':    ['fg', 'PreProc'],
-" \ 'border':  ['fg', 'Ignore'],
-" \ 'prompt':  ['fg', 'Conditional'],
-" \ 'pointer': ['fg', 'Exception'],
-" \ 'marker':  ['fg', 'Keyword'],
-" \ 'spinner': ['fg', 'Label'],
-" \ 'header':  ['fg', 'Comment'] }
 
 "" Global and local search
 function! RipgrepFzf(query, fullscreen)
